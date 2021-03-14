@@ -18,10 +18,11 @@ public class TestServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
-		
 		res.setContentType("text/html; charset=utf-8");
 		PrintWriter out = res.getWriter();
-
+		
+		req.setCharacterEncoding("utf-8");
+		
 		// 공통 코드 처리//
 		System.out.println("공통코드 처리");
 		ArticleDao adao = new ArticleDao();
@@ -44,7 +45,6 @@ public class TestServlet extends HttpServlet {
 					forward(req, res, "list5.jsp");
 					
 				} else if(action.equals("insert")) {
-					
 					String title = req.getParameter("title");
 					String body = req.getParameter("body");
 					String mid = req.getParameter("mid");
@@ -84,14 +84,19 @@ public class TestServlet extends HttpServlet {
 					HttpSession session = req.getSession();
 					Member loginedMember = (Member)session.getAttribute("loginedMember");
 					
-					System.out.println(loginedMember);
+					
 					
 					if(loginedMember == null) {
 						forward(req, res, "loginForm.jsp");
 						
 					} else {
 						Article article = adao.getArticleById(id);
+						ArrayList<Reply> replies = adao.getReplies(id);
+						
 						req.setAttribute("article", article);
+						req.setAttribute("replies", replies);
+						System.out.println(replies.size());
+						
 						forward(req, res, "detail.jsp");
 						
 					}
@@ -110,6 +115,21 @@ public class TestServlet extends HttpServlet {
 						
 						res.sendRedirect("article?action=list");						
 					}
+				} else if(action.equals("test")) {
+					HttpSession session = req.getSession();
+					Member member = new Member(1, "user1", "pass1", "홍길동");
+					
+					session.setAttribute("loginedMember", member);
+					res.sendRedirect("article?action=list");
+				} else if(action.equals("insertReply")) {
+					
+					String aid = req.getParameter("aid");
+					String rbody = req.getParameter("rbody");
+					String mid = req.getParameter("mid");
+					
+					adao.insertReply(aid, rbody, mid);
+					
+					res.sendRedirect("article?action=detail&id=" + aid);
 				}
 			}
 			

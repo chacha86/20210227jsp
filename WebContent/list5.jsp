@@ -13,6 +13,7 @@
 	<c:when test="${ loginedMember == null }">
 		<a href="loginForm.jsp">로그인</a>
 		<a href="#">회원가입</a>
+		<a href="article?action=test">테스트 로그인</a>
 	</c:when>
 	<c:otherwise>
 		${ loginedMember.nickname }! 반갑습니다.	
@@ -27,8 +28,6 @@
 			작성일 : ${ article.regDate }<br>
 			조회수 : ${ article.hit }<br>
 			좋아요 : ${ article.likeCnt}<br>
-			<a href="article?action=updateForm&id=${ article.id }">수정</a><br>
-			<a href="article?action=delete&id=${ article.id }">삭제</a>
 		</div>
 		<hr>
 	</c:forEach>

@@ -133,6 +133,7 @@ public class ArticleDao {
 			m = new Member();
 			m.setId(rs.getInt("id"));
 			m.setLoginId(rs.getString("loginId"));
+			m.setLoginId(rs.getString("loginPw"));
 			m.setNickname(rs.getString("nickname"));
 		}
 		
@@ -147,7 +148,11 @@ public class ArticleDao {
 	public Article getArticleById(String aid) throws ClassNotFoundException, SQLException {
 		
 		Statement stmt = getConnection().createStatement();
-		String sql = "SELECT * \r\n" + "FROM article \r\n" + "WHERE id = " + aid;
+		String sql = "SELECT a.*, m.nickname\r\n" + 
+				"FROM article a \r\n" + 
+				"INNER JOIN `member` m\r\n" + 
+				"ON a.mid = m.id WHERE a.id = " + aid;
+		
 		ResultSet rs = stmt.executeQuery(sql);
 
 		Article a = new Article();
@@ -156,12 +161,16 @@ public class ArticleDao {
 			int targetId = rs.getInt("id");
 			String title = rs.getString("title");
 			String body = rs.getString("body");
+			int mid = rs.getInt("mid");
 			String regDate = rs.getString("regDate");
+			String nickname = rs.getString("nickname");
 			
 			a.setId(targetId);
 			a.setTitle(title);
 			a.setBody(body);
 			a.setRegDate(regDate);
+			a.setNickname(nickname);
+			a.setMid(mid);
 			
 		}
 		
@@ -169,7 +178,7 @@ public class ArticleDao {
 	}
 	
 	// 댓글 목록 가져오기
-	public ArrayList<Reply> getReplies(int aid) throws ClassNotFoundException, SQLException {
+	public ArrayList<Reply> getReplies(String aid) throws ClassNotFoundException, SQLException {
 		Statement stmt = getConnection().createStatement();
 		String sql = "SELECT r.*, m.nickname \r\n" + 
 				"FROM reply r\r\n" + 
@@ -205,6 +214,22 @@ public class ArticleDao {
 		}
 		
 		return replies;
+	}
+
+	public void insertReply(String aid, String rbody, String mid) throws ClassNotFoundException, SQLException {
+		Statement stmt = getConnection().createStatement();
+
+		String sql = "INSERT INTO reply \r\n" + "SET aid = '" + aid + "',\r\n" + "`body` = '" + rbody + "',\r\n" + "`mid` = " + mid + ",\r\n"
+				+ "regDate = NOW()";
+		// 조회 결과가 있는 경우 : select -> executeQuery() - ResultSet으로 리턴
+		// 조회 결과가 없는 경우 : update, delete, insert -> executeUpdate() - 리턴 X
+		
+		System.out.println(sql);
+		stmt.executeUpdate(sql);
+
+		if (stmt != null) {
+			stmt.close();
+		}
 	}
 }
 
