@@ -26,6 +26,7 @@ public class TestServlet extends HttpServlet {
 		// 공통 코드 처리//
 		System.out.println("공통코드 처리");
 		ArticleDao adao = new ArticleDao();
+		ArticleDao2 adao2 = new ArticleDao2();
 		
 		try {
 			
@@ -33,7 +34,7 @@ public class TestServlet extends HttpServlet {
 			
 			if(action != null) {
 				if(action.equals("list")) {
-					ArrayList<Article> articles = adao.ArticleList();
+					ArrayList<Article> articles = adao2.getAllArticles();
 				
 					// list1.jsp
 					//1. 데이터 담기
