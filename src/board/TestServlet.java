@@ -48,9 +48,11 @@ public class TestServlet extends HttpServlet {
 				} else if(action.equals("insert")) {
 					String title = req.getParameter("title");
 					String body = req.getParameter("body");
-					String mid = req.getParameter("mid");
+					int mid = Integer.parseInt(req.getParameter("mid"));
 					
-					adao.addArticle(title, body, mid);
+					System.out.println(mid);
+					
+					adao2.addArticle(title, body, mid);
 					
 					// 리다이렉팅
 					res.sendRedirect("article?action=list");
@@ -79,7 +81,7 @@ public class TestServlet extends HttpServlet {
 					res.sendRedirect("article?action=list");
 					
 				} else if(action.equals("detail")) {
-					String id = req.getParameter("id");
+					String id = req.getParameter("id"); // 게시물 아이디
 					
 					// 로그인 체크?
 					HttpSession session = req.getSession();
@@ -94,6 +96,13 @@ public class TestServlet extends HttpServlet {
 						Article article = adao.getArticleById(id);
 						ArrayList<Reply> replies = adao.getReplies(id);
 						
+						String flag = req.getParameter("flag");
+						String rid = req.getParameter("rid");
+						
+						if(flag != null) {
+							req.setAttribute("flag", flag);
+						}
+						req.setAttribute("rid", rid);
 						req.setAttribute("article", article);
 						req.setAttribute("replies", replies);
 						System.out.println(replies.size());
@@ -130,6 +139,18 @@ public class TestServlet extends HttpServlet {
 					
 					adao.insertReply(aid, rbody, mid);
 					
+					res.sendRedirect("article?action=detail&id=" + aid);
+				} else if(action.equals("updateReply")) {
+					int id = Integer.parseInt(req.getParameter("id")); // 댓글 번호
+					int aid = Integer.parseInt(req.getParameter("aid")); // 댓글 번호
+					String body = req.getParameter("rbody");
+					
+					Reply reply = new Reply();
+					reply.setId(id);
+					reply.setBody(body);
+					
+					adao2.updateReplyById(reply);
+
 					res.sendRedirect("article?action=detail&id=" + aid);
 				}
 			}

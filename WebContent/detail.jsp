@@ -25,8 +25,27 @@
 <hr>
 <c:forEach items="${ replies }" var="reply">
 	${reply.nickname}<br>
-	${reply.body}<br>
-	${reply.regDate}<br>
+	<c:choose>
+		<c:when test="${ flag == 'y' && reply.id == rid }"> <!-- 수정 링크를 눌렀냐 안눌렀냐 -->
+			<form action="article">
+				<input type="hidden" name="id" value="${ reply.id }"/>
+				<input type="text" name="rbody" value="${ reply.body }"/>
+				<input type="hidden" name="aid" value="${ article.id }" />
+				<input type="hidden" name="mid" value="${ loginedMember.id }" />
+				<input type="hidden" name="action" value="updateReply" />
+				<input type="submit" value="등록" />
+			</form>
+			
+		</c:when>
+		<c:otherwise>
+			${reply.body}<br>
+		</c:otherwise>
+	</c:choose>
+	
+	${reply.regDate} 
+	<c:if test="${ loginedMember.id == reply.mid }">	
+		<a href="article?action=detail&id=${ article.id }&flag=y&rid=${reply.id}">수정</a> <a href="#">삭제</a>
+	</c:if>
 	<hr>
 </c:forEach>
 <form action="article">

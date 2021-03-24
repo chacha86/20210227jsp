@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board2.ArticleMapper">
+	<select id="selectArticles" resultType="board2.Article">
+		SELECT a.*, m.nickname
+		FROM article a
+		INNER JOIN `member` m
+		ON a.mid=m.id
+	</select>
+	<select id="addArticle1" parameterType="map">
+		INSERT INTO article
+		SET
+		title = #{title},
+		`body` = #{body},
+		`mid` = #{mid},
+		hit = 0,
+		regDate =
+		NOW()
+	</select>
+	<select id="addArticle2" parameterType="board2.Article">
+		INSERT INTO article
+		SET
+		title = #{title},
+		`body` = #{body},
+		`mid` = #{mid},
+		hit = 0,
+		regDate =
+		NOW()
+	</select>
+	<select id="deleteArticle" parameterType="int">
+		DELETE FROM article
+		WHERE id=#{id}
+	</select>
+</mapper>

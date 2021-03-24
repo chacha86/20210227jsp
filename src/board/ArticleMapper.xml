@@ -8,4 +8,29 @@
     select * from article
   </select>
   
+  <insert id="addArticle1" parameterType="map">
+  	INSERT INTO article 
+	SET title = #{title},
+	`body` = #{body},
+	`mid` = #{mid},
+	hit = 0,
+	regDate = NOW()
+  </insert>
+  
+  <insert id="addArticle2" parameterType="board.Article">
+  	INSERT INTO article 
+	SET title = #{title},
+	`body` = #{body},
+	`mid` = #{mid},
+	hit = 0,
+	regDate = NOW()
+  </insert>
+  
+  <select id="getReplyById" parameterType="int" resultType="board.Reply">
+  	select * from reply where id = #{id}
+  </select>
+  
+  <update id="updateReplyById" parameterType="board.Reply">
+  	update reply set body = #{body} where id = #{id}
+  </update>
 </mapper>
