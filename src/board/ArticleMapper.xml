@@ -33,4 +33,22 @@
   <update id="updateReplyById" parameterType="board.Reply">
   	update reply set body = #{body} where id = #{id}
   </update>
+  
+  <select id="searchArticles" parameterType="map" resultType="board.Article">
+  	SELECT * 
+  	FROM article 
+  	WHERE 1=1
+  	<if test="dateInterval != 'all'" >
+  		AND regDate BETWEEN DATE_ADD(NOW(), INTERVAL ${dateInterval}) AND NOW()
+  	</if>
+  	<choose> 
+  		<when test="sTarget != 'titleAndbody'" > 
+  			AND ${sTarget} LIKE '%${keyword}%' 
+  		</when> 
+  		<otherwise> 
+  			AND (title LIKE '%${keyword}%' OR body LIKE '%${keyword}%') 	
+  		</otherwise> 
+  	</choose>
+  </select>
+  
 </mapper>

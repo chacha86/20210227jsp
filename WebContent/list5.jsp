@@ -33,5 +33,24 @@
 	</c:forEach>
 	
 <a href="addForm.jsp">글쓰기</a>
+<form action="/article">
+		<select name="dateInterval">
+			<c:forEach items="${dateIntervalCodes}" var="dateIntervalCode">
+				<option value="${dateIntervalCode.codeValue}" <c:if test="${ dateInterval == dateIntervalCode.codeValue }">selected</c:if>>${dateIntervalCode.codeName}</option>
+			</c:forEach>
+		</select>
+
+		<select name="sTarget">
+			<option value="titleAndbody">제목+내용</option>
+			<option value="title">제목만</option>
+			<option value="nickname">글작성자</option>
+			<option value="rbody">댓글내용</option>
+			<option value="rnickname">댓글작성자</option>
+		</select>
+
+		<input type="text" name="keyword"/>
+		<input type="hidden" name="action" value="doSearch"/>
+		<input type="submit" value="검색"/>
+	</form>
 </body>
 </html>

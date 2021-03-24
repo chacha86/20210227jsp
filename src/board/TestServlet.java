@@ -34,11 +34,17 @@ public class TestServlet extends HttpServlet {
 			
 			if(action != null) {
 				if(action.equals("list")) {
+					
+					ArrayList<DateIntervalCode> dateIntervalCodes = adao2.getDateIntervalCodes();
+					ArrayList<SearchTypeCode> sTargetCodes = adao2.getSearchTypeCodes();				
+					
 					ArrayList<Article> articles = adao2.getAllArticles();
 				
 					// list1.jsp
 					//1. 데이터 담기
 					req.setAttribute("list", articles);
+					req.setAttribute("dateIntervalCodes", dateIntervalCodes);
+					req.setAttribute("sTargetCodes", sTargetCodes);
 					
 					//ArrayList<Article> list = (ArrayList<Article>)request.getAttribute("list");
 					
@@ -152,6 +158,23 @@ public class TestServlet extends HttpServlet {
 					adao2.updateReplyById(reply);
 
 					res.sendRedirect("article?action=detail&id=" + aid);
+				} else if(action.equals("doSearch")) {
+					
+					String dateInterval = req.getParameter("dateInterval");
+					String sTarget = req.getParameter("sTarget");
+					String keyword = req.getParameter("keyword");
+
+					ArrayList<Article> searchedArticles = adao2.searchArticles(dateInterval, sTarget, keyword);
+					
+					req.setAttribute("dateInterval", dateInterval);
+					req.setAttribute("sTarget", sTarget);
+					req.setAttribute("keyword", keyword);
+					
+					req.setAttribute("list", searchedArticles);
+					
+					
+					
+					forward(req, res, "list5.jsp");
 				}
 			}
 			

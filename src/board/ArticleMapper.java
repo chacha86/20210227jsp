@@ -12,4 +12,5 @@ public interface ArticleMapper {
 	public void addArticle2(Article param);
 	public Reply getReplyById(int id);
 	public void updateReplyById(Reply reply);
+	public ArrayList<Article> searchArticles(Map<String, Object> param);
 }

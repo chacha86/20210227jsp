@@ -69,5 +69,47 @@ public class ArticleDao2 {
 		
 		session.commit();
 	}
+
+	public ArrayList<Article> searchArticles(String dateInterval, String sTarget, String keyword) {
+		
+		SqlSession session = sqlSessionFactory.openSession();
+		ArticleMapper mapper = session.getMapper(ArticleMapper.class);
+		
+		HashMap<String, Object> param = new HashMap<>();
+		
+		param.put("dateInterval", dateInterval);
+		param.put("sTarget", sTarget);
+		param.put("keyword", keyword);
+		ArrayList<Article> list = mapper.searchArticles(param);
+		
+		System.out.println(list.size());
+		return mapper.searchArticles(param);
+	}
 	
+	public ArrayList<DateIntervalCode> getDateIntervalCodes() {
+		ArrayList<DateIntervalCode> dateIntervalCodes = new ArrayList<>();
+		
+		dateIntervalCodes.add(new DateIntervalCode("all", "전체기간"));
+		dateIntervalCodes.add(new DateIntervalCode("-1 day", "1일"));
+		dateIntervalCodes.add(new DateIntervalCode("-1 week", "1주"));
+		dateIntervalCodes.add(new DateIntervalCode("-1 month", "1개월"));
+		dateIntervalCodes.add(new DateIntervalCode("-6 month", "6개월"));
+		dateIntervalCodes.add(new DateIntervalCode("-1 year", "1년"));
+		
+		return dateIntervalCodes;
+	}
+	
+	public ArrayList<SearchTypeCode> getSearchTypeCodes() {
+		ArrayList<SearchTypeCode> searchTypeCodes = new ArrayList<>();
+			
+		searchTypeCodes.add(new SearchTypeCode("titleAndBody", "제목+내용"));
+		searchTypeCodes.add(new SearchTypeCode("title", "제목"));       
+		searchTypeCodes.add(new SearchTypeCode("body", "내용"));        
+		searchTypeCodes.add(new SearchTypeCode("rbody", "댓글내용"));     
+		searchTypeCodes.add(new SearchTypeCode("rnickname", "댓글작성자"));
+		
+		return searchTypeCodes;
+		
+	}
 }
+
